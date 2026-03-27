@@ -65,29 +65,31 @@ At every step, 3-4 options are rendered side by side in your browser. Pick one, 
 
 ### Install the Skill
 
-Clone or download this repository, then install the skill into Claude Code:
+1. Clone the repo into your project (or anywhere on your machine):
 
 ```bash
-# Clone the repo
 git clone https://github.com/mayuresh747/interactive-design-skill.git
-
-# Install the skill into Claude Code
-claude skill install ./interactive-design-skill
 ```
 
-Or install directly from GitHub:
+2. Add the skill to your project's `CLAUDE.md` (or `~/.claude/CLAUDE.md` for global access):
+
+```markdown
+## Skills
+
+Load the interactive-design skill from:
+/path/to/interactive-design-skill/SKILL.md
+```
+
+Or copy the entire `interactive-design-skill/` folder into your project's `.claude/skills/` directory:
 
 ```bash
-claude skill install github:mayuresh747/interactive-design-skill
+mkdir -p .claude/skills
+cp -r interactive-design-skill .claude/skills/interactive-design
 ```
 
 ### Verify Installation
 
-```bash
-claude skill list
-```
-
-You should see `interactive-design` in the output.
+Start a Claude Code session and ask it to build a website — the skill will activate automatically based on the SKILL.md description.
 
 ---
 
