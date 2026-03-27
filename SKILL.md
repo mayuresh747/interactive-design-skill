@@ -321,7 +321,10 @@ output/
 After the user approves the final output:
 1. Report what was built: output format, number of sections, animation level, images used
 2. If any new patterns were discovered during teardown, confirm they've been saved to the library
-3. Offer: "Want me to deploy this to Vercel?" (if Next.js/Astro format)
+3. Offer cleanup: "The wizard generated temporary HTML files during steps 1-8 (comparison pages, previews). Want me to delete them, or would you like to keep them for reference?"
+   - If delete: remove all temporary comparison/preview HTML files created during the wizard
+   - If keep: leave them in place
+4. Offer: "Want me to deploy this to Vercel?" (if Next.js/Astro format)
 
 ---
 
