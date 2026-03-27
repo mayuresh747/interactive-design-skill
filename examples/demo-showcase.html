@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interactive Design Skill — Pattern Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #09090b;
+    --surface: #18181b;
+    --surface-2: #27272a;
+    --text: #fafafa;
+    --text-muted: #a1a1aa;
+    --accent: #f59e0b;
+    --accent-2: #3b82f6;
+    --border: #27272a;
+    --radius: 12px;
+    --font: 'Space Grotesk', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 2rem 10rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 600px 400px at 30% 20%, rgba(245, 158, 11, 0.08), transparent),
+      radial-gradient(ellipse 500px 500px at 70% 60%, rgba(59, 130, 246, 0.06), transparent);
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .badge span {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.5); }
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    max-width: 800px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 1rem;
+  }
+
+  .hero-stats .stat {
+    text-align: center;
+  }
+
+  .hero-stats .stat-num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  .hero-stats .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.25rem;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    animation: float 3s ease infinite;
+  }
+
+  .scroll-hint .arrow {
+    width: 20px; height: 20px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: rotate(45deg);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* ── Section Layout ── */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── Workflow Steps ── */
+  .workflow {
+    display: grid;
+    gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .workflow-step {
+    background: var(--surface);
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    transition: background 0.3s ease;
+  }
+
+  .workflow-step:hover {
+    background: var(--surface-2);
+  }
+
+  .step-num {
+    width: 3rem; height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .step-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .step-content p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* ── Pattern Grid ── */
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .pattern-card {
+    background: var(--surface);
+    padding: 1.75rem;
+    transition: background 0.3s ease;
+    cursor: default;
+  }
+
+  .pattern-card:hover {
+    background: var(--surface-2);
+  }
+
+  .pattern-card .card-category {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent-2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.75rem;
+  }
+
+  .pattern-card h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .pattern-card p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .pattern-card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .pattern-card .tag {
+    padding: 0.15rem 0.6rem;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-family: var(--mono);
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* ── Code Block ── */
+  .code-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 2rem 0;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .code-header .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .code-header .dot:nth-child(1) { background: #ef4444; }
+  .code-header .dot:nth-child(2) { background: #eab308; }
+  .code-header .dot:nth-child(3) { background: #22c55e; }
+
+  .code-body {
+    padding: 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: var(--text-muted);
+  }
+
+  .code-body .prompt { color: var(--accent); }
+  .code-body .cmd { color: var(--text); }
+  .code-body .comment { color: #52525b; }
+  .code-body .output { color: #6ee7b7; }
+  .code-body .highlight { color: var(--accent-2); }
+
+  /* ── Feature Cards ── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .feature {
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: border-color 0.3s ease;
+  }
+
+  .feature:hover {
+    border-color: var(--accent);
+  }
+
+  .feature-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  /* ── Palette Demo ── */
+  .palette-row {
+    display: flex;
+    gap: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    height: 80px;
+    margin-bottom: 0.75rem;
+  }
+
+  .palette-row .swatch {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    padding: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    transition: flex 0.3s ease;
+  }
+
+  .palette-row .swatch:hover {
+    flex: 2;
+  }
+
+  .palette-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-muted);
+  }
+
+  /* ── Footer ── */
+  footer {
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+
+  footer p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .hero-stats { flex-direction: column; gap: 1.5rem; }
+    .workflow-step { grid-template-columns: 1fr; gap: 0.75rem; }
+    .step-num { width: 2.5rem; height: 2.5rem; font-size: 0.8rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ── Hero ── -->
+  <header class="hero">
+    <div class="badge"><span></span> Claude Code Skill</div>
+    <h1>A <em>self-learning</em> skill for interactive websites</h1>
+    <p>A guided design wizard that gets smarter with every site you analyze. 8 design decisions with live side-by-side browser previews, a self-learning pattern library, and production-ready output.</p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num" style="color: #6ee7b7;">&#x221E;</div>
+        <div class="stat-label">Self-Learning</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">38+</div>
+        <div class="stat-label">Pattern Files</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">25</div>
+        <div class="stat-label">Components</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">34</div>
+        <div class="stat-label">Animation Presets</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Color Palettes</div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      Scroll to explore
+      <div class="arrow"></div>
+    </div>
+  </header>
+
+  <!-- ── Self-Learning ── -->
+  <section style="border: 1px solid var(--accent); border-radius: var(--radius); padding: 3rem 2rem; margin: 0 auto; max-width: 1200px; position: relative; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background: radial-gradient(ellipse 400px 300px at 50% 0%, rgba(245, 158, 11, 0.06), transparent); pointer-events: none;"></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;">
+      <div>
+        <div class="section-label" style="color: #6ee7b7;">Core Differentiator</div>
+        <h2 class="section-title" style="font-size: clamp(1.6rem, 3vw, 2.4rem);">A skill that gets smarter every time you use it</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Most tools ship with a fixed set of templates that never change. This skill <strong style="color: var(--text);">learns new patterns from every site it analyzes</strong> and adds them to its library automatically.</p>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Point it at a site with a technique it hasn't seen — a novel scroll behavior, an unusual hero layout, a creative hover effect — and it will <strong style="color: var(--text);">reverse-engineer, catalog, and reuse it</strong> in future builds.</p>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">It starts with 38 patterns. After a few projects, it could be 50, 60, or more. <strong style="color: var(--accent);">Your skill becomes uniquely yours.</strong></p>
+      </div>
+      <div class="code-block" style="margin: 0;">
+        <div class="code-header">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          <span style="margin-left: 0.5rem;">pattern discovery</span>
+        </div>
+        <div class="code-body" style="font-size: 0.78rem;">
+<span class="highlight">/interactive-design</span> <span class="output">Teardown complete. Found 2 new patterns:</span>
+<br><br>
+<span class="comment">  1. "horizontal scroll gallery with</span>
+<span class="comment">      parallax depth layers"</span>
+<span class="comment">  2. "text counter with eased number roll"</span>
+<br><br>
+<span class="highlight">     </span> <span class="output">Add them to the pattern library?</span>
+<br><br>
+<span class="prompt">you &gt;</span> <span class="cmd">Yes</span>
+<br><br>
+<span class="highlight">/interactive-design</span> <span class="output">Saved:</span>
+<span class="comment">  patterns/components/content-parallax-gallery.md</span>
+<span class="comment">  patterns/components/text-counter-roll.md</span>
+<br><br>
+<span class="output">  Both are now available in future wizard runs.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ── -->
+  <section>
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Describe it. Preview it. Ship it.</h2>
+    <p class="section-desc">Give the skill a reference URL, a text brief, or both. It guides you through every design decision with live side-by-side browser previews, learns new patterns along the way, and assembles production-ready code.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <span style="margin-left: 0.5rem;">terminal</span>
+      </div>
+      <div class="code-body">
+<span class="prompt">you &gt;</span> <span class="cmd">Build me a site for a coffee roasting brand</span>
+<span class="prompt">     </span> <span class="cmd">dark and moody, cinematic scroll, rich photography</span>
+<br><br>
+<span class="highlight">/interactive-design</span> <span class="output">Starting URL teardown with Playwright...</span>
+<br><br>
+<span class="highlight">       Detected Patterns:</span>
+<span class="comment">         Navigation: "sticky minimal" (87% match)</span>
+<span class="comment">         Hero: "3D/WebGL scene" (92% match)</span>
+<span class="comment">         Layout: "single-column story" (95% match)</span>
+<span class="comment">         Colors: closest to "Dark+Neon" palette</span>
+<span class="comment">         Animation: GSAP ScrollTrigger, Three.js, Lenis</span>
+<br><br>
+<span class="highlight">       Step 1: Mood & Direction</span>
+<span class="output">       Opening comparison page with 4 options...</span>
+      </div>
+    </div>
+
+    <div class="workflow">
+      <div class="workflow-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Provide Input</h3>
+          <p>Give a reference URL, a text brief, or both. Or start from scratch with the step-by-step wizard.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>URL Teardown</h3>
+          <p>Playwright analyzes the reference site: colors, fonts, layout, animations, libraries, scroll behavior, assets.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Learn New Patterns</h3>
+          <p>Any techniques not in the library are reverse-engineered and cataloged. The skill's vocabulary grows with every teardown.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>8-Step Design Wizard</h3>
+          <p>Walk through mood, palette, typography, layout, navigation, hero, content, and animation level — with 3-4 live side-by-side previews at each step.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <h3>Image Sourcing</h3>
+          <p>Search free image libraries, color-grade and crop images to match your palette automatically.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-num">06</div>
+        <div class="step-content">
+          <h3>Assembly & Output</h3>
+          <p>Everything stitched together as single HTML, multi-file static site, Next.js project, or Astro project. Responsive and performance-optimized.</p>
+        </div>
+      </div>
+      <div class="workflow-step">
+        <div class="step-num">07</div>
+        <div class="step-content">
+          <h3>Review & Iterate</h3>
+          <p>Request tweaks, swap images, adjust animations. Repeat until you say "done".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pattern Library ── -->
+  <section>
+    <div class="section-label">Pattern Library</div>
+    <h2 class="section-title">25 components. 34 animations. 8 palettes.</h2>
+    <p class="section-desc">Every pattern comes with complete, working HTML + CSS + JS code ready to customize.</p>
+
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="card-category">Hero</div>
+        <h3>Cinematic Scroll</h3>
+        <p>300vh scroll canvas with staged content reveals. Title fades in, image scales to fullscreen via clip-path, sidebars slide in. Pure GSAP ScrollTrigger.</p>
+        <div class="tags"><span class="tag">gsap</span><span class="tag">scroll-trigger</span><span class="tag">sticky</span><span class="tag">parallax</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Hero</div>
+        <h3>WebGL Scene</h3>
+        <p>Three.js background with interactive particle field or 3D object. Responds to mouse movement and scroll. Falls back to CSS gradient.</p>
+        <div class="tags"><span class="tag">three.js</span><span class="tag">webgl</span><span class="tag">3d</span><span class="tag">interactive</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Navigation</div>
+        <h3>Hamburger Overlay</h3>
+        <p>Full-screen overlay menu with staggered link animations. GSAP timeline opens the overlay with a clip-path circle reveal from the button.</p>
+        <div class="tags"><span class="tag">gsap</span><span class="tag">clip-path</span><span class="tag">overlay</span><span class="tag">stagger</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Content</div>
+        <h3>Bento Grid</h3>
+        <p>Asymmetric masonry-style grid with varying card sizes. Cards animate in on scroll with staggered delays. Hover lifts individual cards.</p>
+        <div class="tags"><span class="tag">grid</span><span class="tag">masonry</span><span class="tag">scroll-reveal</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Image</div>
+        <h3>WebGL Distortion</h3>
+        <p>Image hover effect using a WebGL displacement shader. Mouse position drives distortion intensity and direction. Three.js with custom fragment shader.</p>
+        <div class="tags"><span class="tag">webgl</span><span class="tag">shader</span><span class="tag">hover</span><span class="tag">displacement</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Text</div>
+        <h3>Split Letter Animation</h3>
+        <p>Each character wraps in a span, then staggers in with Y-translation and opacity. Works on headings and paragraphs. GSAP SplitText or manual split.</p>
+        <div class="tags"><span class="tag">gsap</span><span class="tag">split-text</span><span class="tag">stagger</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Animation</div>
+        <h3>Scroll-Driven (8 presets)</h3>
+        <p>Parallax layers, section pinning, horizontal scroll, reveal animations, counter roll-up, progress bar, snap sections, and zoom-through.</p>
+        <div class="tags"><span class="tag">scroll</span><span class="tag">gsap</span><span class="tag">lenis</span><span class="tag">8 presets</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Content</div>
+        <h3>Horizontal Gallery</h3>
+        <p>CSS scroll-snap horizontal image gallery with parallax depth on each card. Scroll indicator shows position. Touch-friendly with momentum.</p>
+        <div class="tags"><span class="tag">scroll-snap</span><span class="tag">parallax</span><span class="tag">touch</span></div>
+      </div>
+      <div class="pattern-card">
+        <div class="card-category">Tech Recipe</div>
+        <h3>Three.js Scene Setup</h3>
+        <p>Production-ready Three.js boilerplate: scene, camera, renderer, resize handler, animation loop, scroll integration, and performance monitoring.</p>
+        <div class="tags"><span class="tag">three.js</span><span class="tag">boilerplate</span><span class="tag">webgl</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Color Palettes ── -->
+  <section>
+    <div class="section-label">Design Tokens</div>
+    <h2 class="section-title">8 production-ready color palettes</h2>
+    <p class="section-desc">Each palette comes with CSS custom properties and sample components pre-styled.</p>
+
+    <div style="display: grid; gap: 1.5rem; margin-top: 2rem;">
+      <div>
+        <div class="palette-name">Dark + Neon</div>
+        <div class="palette-row">
+          <div class="swatch" style="background: #0a0a0a">#0a0a0a</div>
+          <div class="swatch" style="background: #141414">#141414</div>
+          <div class="swatch" style="background: #e5e5e5; color: #0a0a0a">#e5e5e5</div>
+          <div class="swatch" style="background: #3b82f6">#3b82f6</div>
+          <div class="swatch" style="background: #06b6d4">#06b6d4</div>
+          <div class="swatch" style="background: #525252">#525252</div>
+        </div>
+      </div>
+      <div>
+        <div class="palette-name">Warm Neutral</div>
+        <div class="palette-row">
+          <div class="swatch" style="background: #faf8f5; color: #1a1a1a">#faf8f5</div>
+          <div class="swatch" style="background: #f0ece4; color: #1a1a1a">#f0ece4</div>
+          <div class="swatch" style="background: #1a1a1a">#1a1a1a</div>
+          <div class="swatch" style="background: #b45309">#b45309</div>
+          <div class="swatch" style="background: #92400e">#92400e</div>
+          <div class="swatch" style="background: #d4d0c8; color: #1a1a1a">#d4d0c8</div>
+        </div>
+      </div>
+      <div>
+        <div class="palette-name">Ocean</div>
+        <div class="palette-row">
+          <div class="swatch" style="background: #0c1222">#0c1222</div>
+          <div class="swatch" style="background: #172038">#172038</div>
+          <div class="swatch" style="background: #e0f2fe">#e0f2fe</div>
+          <div class="swatch" style="background: #0ea5e9">#0ea5e9</div>
+          <div class="swatch" style="background: #14b8a6">#14b8a6</div>
+          <div class="swatch" style="background: #334155">#334155</div>
+        </div>
+      </div>
+      <div>
+        <div class="palette-name">Sunset</div>
+        <div class="palette-row">
+          <div class="swatch" style="background: #1c1017">#1c1017</div>
+          <div class="swatch" style="background: #2d1a24">#2d1a24</div>
+          <div class="swatch" style="background: #fce7f3">#fce7f3</div>
+          <div class="swatch" style="background: #f43f5e">#f43f5e</div>
+          <div class="swatch" style="background: #f97316">#f97316</div>
+          <div class="swatch" style="background: #6b4c5e">#6b4c5e</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ── -->
+  <section>
+    <div class="section-label">Capabilities</div>
+    <h2 class="section-title">Everything you need</h2>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">&#x1f9e0;</div>
+        <h3>Self-Learning Pattern Library</h3>
+        <p>Every site you analyze teaches the skill something new. Novel patterns are reverse-engineered, cataloged, and available in all future builds. Starts at 38, grows without limit.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x1f50d;</div>
+        <h3>Deep URL Teardown</h3>
+        <p>Playwright analyzes any reference site: DOM structure, computed styles, animation libraries, scroll behavior, and asset inventory.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x1f3a8;</div>
+        <h3>Side-by-Side Previews</h3>
+        <p>Every design decision shows 3-4 options rendered side by side in your browser. Pick one, remix two, or regenerate.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x1f4f7;</div>
+        <h3>Image Sourcing &amp; Editing</h3>
+        <p>Searches free image libraries, then color-grades, crops, and overlays selected images to match your chosen palette.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x26a1;</div>
+        <h3>4 Output Formats</h3>
+        <p>Single HTML file, multi-file static site, Next.js project, or Astro project. All responsive and performance-optimized.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">&#x1f3ac;</div>
+        <h3>Production-Grade Patterns</h3>
+        <p>Complete working code for every pattern — not descriptions or wireframes. Drop-in HTML + CSS + JS with configuration options.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Quick Start ── -->
+  <section>
+    <div class="section-label">Quick Start</div>
+    <h2 class="section-title">Get started in 30 seconds</h2>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        <span style="margin-left: 0.5rem;">terminal</span>
+      </div>
+      <div class="code-body">
+<span class="comment"># Invoke the skill directly</span>
+<span class="prompt">you &gt;</span> <span class="cmd">/interactive-design</span>
+<br><br>
+<span class="comment"># Or just describe what you want</span>
+<span class="prompt">you &gt;</span> <span class="cmd">Build me an interactive portfolio with smooth scroll and dark theme</span>
+<br><br>
+<span class="highlight">/interactive-design</span> <span class="output">How would you like to start?</span>
+<span class="comment">       1. Step by step</span>
+<span class="comment">       2. Copy from a site</span>
+<span class="comment">       3. URL + brief</span>
+<span class="comment">       4. Just a brief</span>
+<br><br>
+<span class="prompt">you &gt;</span> <span class="cmd">1</span>
+<br><br>
+<span class="highlight">/interactive-design</span> <span class="output">Step 1: Mood & Direction</span>
+<span class="output">       Opening comparison page with 4 options...</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer>
+    <p>Built by Mayuresh using <a href="https://claude.ai">Claude</a></p>
+    <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #52525b;">A Claude Code skill for building interactive websites</p>
+  </footer>
+
+</body>
+</html>

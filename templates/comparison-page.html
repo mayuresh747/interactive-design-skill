@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{STEP_TITLE}} — Interactive Design</title>
+  <style>
+    /* === COMPARISON PAGE CHROME === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --chrome-bg: #0a0a0a;
+      --chrome-surface: #141414;
+      --chrome-border: #2a2a2a;
+      --chrome-text: #e5e5e5;
+      --chrome-muted: #737373;
+      --chrome-accent: #3b82f6;
+      --chrome-label-a: #3b82f6;
+      --chrome-label-b: #8b5cf6;
+      --chrome-label-c: #f59e0b;
+      --chrome-label-d: #ef4444;
+    }
+
+    body {
+      background: var(--chrome-bg);
+      color: var(--chrome-text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* === HEADER === */
+    .comparison-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--chrome-border);
+    }
+
+    .comparison-header h1 {
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--chrome-muted);
+      margin-bottom: 8px;
+    }
+
+    .comparison-header h2 {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--chrome-text);
+    }
+
+    .comparison-header p {
+      font-size: 14px;
+      color: var(--chrome-muted);
+      margin-top: 8px;
+    }
+
+    /* === GRID === */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .comparison-grid.single-row {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .comparison-grid.three-col {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* === OPTION CARD === */
+    .option-card {
+      background: var(--chrome-surface);
+      border: 1px solid var(--chrome-border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .option-card:hover {
+      border-color: #444;
+    }
+
+    .option-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--chrome-border);
+    }
+
+    .option-label {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .option-label.label-a { background: var(--chrome-label-a); }
+    .option-label.label-b { background: var(--chrome-label-b); }
+    .option-label.label-c { background: var(--chrome-label-c); }
+    .option-label.label-d { background: var(--chrome-label-d); }
+
+    .option-meta {
+      flex: 1;
+    }
+
+    .option-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--chrome-text);
+    }
+
+    .option-tag {
+      font-size: 12px;
+      color: var(--chrome-muted);
+      margin-top: 2px;
+    }
+
+    /* === OPTION CONTENT (where the actual design renders) === */
+    .option-content {
+      padding: 0;
+      min-height: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* For options that need scrollable content */
+    .option-content.scrollable {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    /* For options that render full viewport mockups */
+    .option-content.viewport {
+      height: 500px;
+      overflow: hidden;
+    }
+
+    /* iframe embed for complex interactive options */
+    .option-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    /* === FOOTER === */
+    .comparison-footer {
+      text-align: center;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--chrome-border);
+    }
+
+    .comparison-footer p {
+      font-size: 14px;
+      color: var(--chrome-muted);
+    }
+
+    .comparison-footer .hint {
+      font-size: 12px;
+      color: #555;
+      margin-top: 8px;
+    }
+
+    /* === UTILITY: color swatch strips === */
+    .swatch-strip {
+      display: flex;
+      height: 48px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 16px;
+    }
+
+    .swatch-strip .swatch {
+      flex: 1;
+      position: relative;
+    }
+
+    .swatch-strip .swatch span {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 9px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: rgba(255,255,255,0.7);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+      white-space: nowrap;
+    }
+
+    /* === UTILITY: type specimen === */
+    .type-specimen {
+      padding: 24px;
+    }
+
+    .type-specimen .hero-text {
+      font-size: 48px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .type-specimen .sub-text {
+      font-size: 20px;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+
+    .type-specimen .body-text {
+      font-size: 16px;
+      line-height: 1.6;
+      opacity: 0.7;
+    }
+
+    .type-specimen .caption-text {
+      font-size: 12px;
+      line-height: 1.5;
+      opacity: 0.5;
+      margin-top: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* === UTILITY: mini UI elements === */
+    .mini-ui {
+      padding: 24px;
+    }
+
+    .mini-button {
+      display: inline-block;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+
+    .mini-card {
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .mini-link {
+      text-decoration: none;
+      font-size: 14px;
+      border-bottom: 1px solid;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 1200px) {
+      .comparison-grid.single-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .comparison-grid,
+      .comparison-grid.single-row,
+      .comparison-grid.three-col {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <!-- Google Fonts preload — add fonts needed by options here -->
+  {{FONT_LINKS}}
+</head>
+<body>
+
+  <header class="comparison-header">
+    <h1>Step {{STEP_NUMBER}} of 8</h1>
+    <h2>{{STEP_TITLE}}</h2>
+    <p>{{STEP_DESCRIPTION}}</p>
+  </header>
+
+  <div class="comparison-grid {{GRID_CLASS}}">
+
+    <!-- === OPTION A === -->
+    <div class="option-card">
+      <div class="option-card-header">
+        <div class="option-label label-a">A</div>
+        <div class="option-meta">
+          <div class="option-name">{{OPTION_A_NAME}}</div>
+          <div class="option-tag">{{OPTION_A_TAG}}</div>
+        </div>
+      </div>
+      <div class="option-content {{CONTENT_CLASS}}">
+        {{OPTION_A_CONTENT}}
+      </div>
+    </div>
+
+    <!-- === OPTION B === -->
+    <div class="option-card">
+      <div class="option-card-header">
+        <div class="option-label label-b">B</div>
+        <div class="option-meta">
+          <div class="option-name">{{OPTION_B_NAME}}</div>
+          <div class="option-tag">{{OPTION_B_TAG}}</div>
+        </div>
+      </div>
+      <div class="option-content {{CONTENT_CLASS}}">
+        {{OPTION_B_CONTENT}}
+      </div>
+    </div>
+
+    <!-- === OPTION C === -->
+    <div class="option-card">
+      <div class="option-card-header">
+        <div class="option-label label-c">C</div>
+        <div class="option-meta">
+          <div class="option-name">{{OPTION_C_NAME}}</div>
+          <div class="option-tag">{{OPTION_C_TAG}}</div>
+        </div>
+      </div>
+      <div class="option-content {{CONTENT_CLASS}}">
+        {{OPTION_C_CONTENT}}
+      </div>
+    </div>
+
+    <!-- === OPTION D (optional — remove if only 3 options) === -->
+    <div class="option-card">
+      <div class="option-card-header">
+        <div class="option-label label-d">D</div>
+        <div class="option-meta">
+          <div class="option-name">{{OPTION_D_NAME}}</div>
+          <div class="option-tag">{{OPTION_D_TAG}}</div>
+        </div>
+      </div>
+      <div class="option-content {{CONTENT_CLASS}}">
+        {{OPTION_D_CONTENT}}
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="comparison-footer">
+    <p>Pick an option: A, B, C, or D — or describe a remix ("mix A and C", "like B but darker")</p>
+    <div class="hint">Interactive Design Skill &mdash; Side-by-Side Preview</div>
+  </footer>
+
+  <!-- Per-option scripts (animations, interactions) -->
+  {{OPTION_SCRIPTS}}
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{SITE_TITLE}}</title>
+  <meta name="description" content="{{SITE_DESCRIPTION}}">
+
+  <!-- Fonts -->
+  {{FONT_LINKS}}
+
+  <!-- External Libraries (only include what's needed) -->
+  <!-- GSAP Core -->
+  {{#IF_GSAP}}<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>{{/IF_GSAP}}
+  <!-- GSAP ScrollTrigger -->
+  {{#IF_SCROLLTRIGGER}}<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>{{/IF_SCROLLTRIGGER}}
+  <!-- Lenis Smooth Scroll -->
+  {{#IF_LENIS}}<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js" defer></script>{{/IF_LENIS}}
+  <!-- Three.js -->
+  {{#IF_THREEJS}}<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>{{/IF_THREEJS}}
+
+  <style>
+    /* === RESET === */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* === LENIS === */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto; }
+
+    /* === DESIGN TOKENS (swapped per palette selection) === */
+    :root {
+      /* Colors */
+      --bg: {{COLOR_BG}};
+      --surface: {{COLOR_SURFACE}};
+      --text: {{COLOR_TEXT}};
+      --accent-1: {{COLOR_ACCENT_1}};
+      --accent-2: {{COLOR_ACCENT_2}};
+      --muted: {{COLOR_MUTED}};
+
+      /* Typography */
+      --font-display: {{FONT_DISPLAY}};
+      --font-body: {{FONT_BODY}};
+      --text-hero: {{TEXT_HERO}};
+      --text-h1: {{TEXT_H1}};
+      --text-h2: {{TEXT_H2}};
+      --text-h3: {{TEXT_H3}};
+      --text-body: {{TEXT_BODY}};
+      --text-small: {{TEXT_SMALL}};
+      --text-caption: {{TEXT_CAPTION}};
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 32px;
+      --space-xl: 64px;
+      --space-2xl: 128px;
+
+      /* Layout */
+      --max-width: 1200px;
+      --nav-height: 72px;
+      --section-padding: clamp(48px, 8vw, 128px);
+      --border-radius: 12px;
+    }
+
+    /* === BASE === */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-display);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    h1 { font-size: var(--text-hero); }
+    h2 { font-size: var(--text-h1); }
+    h3 { font-size: var(--text-h2); }
+    h4 { font-size: var(--text-h3); }
+
+    a {
+      color: var(--accent-1);
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+
+    section {
+      padding: var(--section-padding) 0;
+    }
+
+    /* === UTILITY CLASSES === */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    .accent-text { color: var(--accent-1); }
+    .muted-text { color: var(--muted); }
+
+    /* === WEBGL CANVAS (if Three.js hero) === */
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      :root {
+        --nav-height: 60px;
+        --space-lg: 20px;
+      }
+    }
+
+    /* ================================================ */
+    /* === COMPONENT STYLES (injected per selection) === */
+    /* ================================================ */
+
+    {{NAV_STYLES}}
+
+    {{HERO_STYLES}}
+
+    {{CONTENT_STYLES}}
+
+    {{FOOTER_STYLES}}
+
+    {{ANIMATION_STYLES}}
+
+  </style>
+</head>
+<body>
+
+  <!-- WebGL Canvas (if Three.js is used) -->
+  {{#IF_THREEJS}}<canvas id="webgl-canvas"></canvas>{{/IF_THREEJS}}
+
+  <!-- ============ NAVIGATION ============ -->
+  {{NAV_HTML}}
+
+  <!-- ============ HERO SECTION ============ -->
+  {{HERO_HTML}}
+
+  <!-- ============ CONTENT SECTIONS ============ -->
+  {{CONTENT_HTML}}
+
+  <!-- ============ FOOTER ============ -->
+  {{FOOTER_HTML}}
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // Wait for all scripts to load
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // === LENIS SMOOTH SCROLL ===
+      {{#IF_LENIS}}
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smooth: true,
+        smoothTouch: false,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Sync with GSAP ScrollTrigger
+      {{#IF_SCROLLTRIGGER}}
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+      {{/IF_SCROLLTRIGGER}}
+      {{/IF_LENIS}}
+
+      // === GSAP SCROLLTRIGGER REGISTRATION ===
+      {{#IF_SCROLLTRIGGER}}
+      gsap.registerPlugin(ScrollTrigger);
+      {{/IF_SCROLLTRIGGER}}
+
+      // === COMPONENT SCRIPTS ===
+      {{NAV_SCRIPT}}
+
+      {{HERO_SCRIPT}}
+
+      {{CONTENT_SCRIPT}}
+
+      {{FOOTER_SCRIPT}}
+
+      {{ANIMATION_SCRIPT}}
+
+      // === THREE.JS SCENE ===
+      {{THREEJS_SCRIPT}}
+
+    });
+  </script>
+
+</body>
+</html>
